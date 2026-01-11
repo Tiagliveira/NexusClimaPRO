@@ -14,6 +14,8 @@
 ![Shadcn/UI](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)
 ![Lucide Icons](https://img.shields.io/badge/Lucide-F78248?style=for-the-badge&logo=lucide&logoColor=white)
 
+---
+
 O **Nexus Clima** nasceu como um desafio técnico de backend, mas evoluiu para um **SaaS (Software as a Service)** completo. O objetivo foi transformar uma arquitetura complexa de microsserviços em uma experiência fluida para o usuário final, integrando **Desktop e Mobile** em tempo real.
 
 O projeto demonstra a maturidade de sair da teoria para a prática, unindo a velocidade do Go, a robustez do NestJS e a interatividade do React/PWA.
@@ -25,7 +27,17 @@ O projeto demonstra a maturidade de sair da teoria para a prática, unindo a vel
 A interface foi desenhada com foco total em UX/UI, utilizando **Glassmorphism** e transições fluídas.
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Tiagliveira/nexusClimaPRO/main/frontend/public/ReadmeNexusClimaPRO.PNG" alt="Nexus Clima" width="100%" />
+  <img src="https://raw.githubusercontent.com/Tiagliveira/nexusClimaPRO/main/frontend/public/ReadmeNexusClimaPRO.PNG" alt="Nexus Clima" width="600" />
+<br />
+  <br />
+
+  <a href="https://nexus-clima-pro-frontend.5scnjc.easypanel.host" target="_blank">
+    <img src="https://img.shields.io/badge/Acessar_Aplicação_Web-00C853?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Deploy Web" />
+  </a>
+
+  &nbsp; <a href="#" target="_blank">
+    <img src="https://img.shields.io/badge/Repositório_Mobile_(Em_Breve)-gray?style=for-the-badge&logo=android&logoColor=white" alt="Mobile App Em Breve" />
+  </a>
 </div>
 
 ---
@@ -45,7 +57,7 @@ flowchart LR
   classDef mongo fill:#47A248,stroke:#fff,stroke-width:2px,color:#fff;
   classDef react fill:#20232A,stroke:#61DAFB,stroke-width:2px,color:#61DAFB;
 
-  subgraph Coleta ["📡 Coleta e Processamento"]
+  subgraph Coleta ["Coleta e Processamento"]
     direction LR
     A[Coletor Python]:::python -->|JSON| B(RabbitMQ):::rabbit
     B -->|Consumo| C[Go Worker]:::go
