@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: nexus_rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "${PORTA_RABBITMQ_ADMIN}:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    networks:
+      - nexus_net
+    healthcheck:
+        test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+        interval: 10s
+        timeout: 10s
+        retries: 5
+        start_period: 60s 
+
+  mongodb:
+    image: mongo:latest
+    container_name: nexus_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - dados_nexus_mongo:/data/db
+    networks:
+      - nexus_net
+
+  worker_python:
+    build: ./coleta_clima
+    container_name: nexus_worker_python
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      MONGO_URI: "mongodb://mongodb:27017"
+    networks:
+      - nexus_net
+
+  api_nest:
+    build: ./api_clima
+    container_name: nexus_api_nest
+    restart: always
+    ports:
+      - "${PORTA_BACKEND}:3000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: "mongodb://mongodb:27017/${MONGO_DB_NAME}"
+      NODE_OPTIONS: "--dns-result-order=ipv4first"
+    networks:
+      - nexus_net
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+
+  processor_go:
+    build: ./processador_clima
+    container_name: nexus_processor_go
+    restart: always
+    depends_on:
+      - rabbitmq
+      - mongodb
+    environment:
+      MONGO_URI: "mongodb://mongodb:27017"
+      RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672/"
+    networks:
+      - nexus_net
+
+  frontend_react:
+    build: ./frontend
+    container_name: nexus_frontend
+    restart: always
+    ports:
+      - "${PORTA_FRONTEND}:5173"
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    networks:
+      - nexus_net
+
+networks:
+  nexus_net:
+    driver: bridge
+
+volumes:
+  dados_nexus_mongo:

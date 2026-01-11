@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "mongoose": "^9.1.2",
+    "mongose": "^0.0.2-security"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3"
+  }
+}
