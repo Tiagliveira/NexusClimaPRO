@@ -6,6 +6,8 @@ import { WeatherCard } from './components/WeatherCard';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { Footer } from './components/Footer';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const TEMAS: Record<string, { bgApp: string, bgCard: string, textPro: string }> = {
   NEUTRO: { bgApp: "bg-slate-900", bgCard: "bg-gradient-to-br from-slate-700 to-slate-800", textPro: "text-slate-500" },
   CALOR_INFERNAL: { bgApp: "bg-orange-900", bgCard: "bg-gradient-to-br from-orange-500 to-red-500", textPro: "text-orange-300" },
@@ -82,7 +84,7 @@ export default function App() {
     setLoading(true);
     setErro("");
     try {
-      const res = await fetch(`http://localhost:3000/weather/latest?cidade=${cidade}`);
+      const res = await fetch(`${API_BASE}/weather/latest?cidade=${cidade}`);
       if (res.ok) setDadoMonitorado(await res.json());
       else setErro("Não foi possível conectar ao servidor principal.");
     } catch (e) {
@@ -100,7 +102,7 @@ export default function App() {
     setErro("");
     setResultadoPesquisa(null);
     try {
-      const res = await fetch(`http://localhost:3000/weather/latest?cidade=${cidadePesquisa}`);
+      const res = await fetch(`${API_BASE}/weather/latest?cidade=${cidadePesquisa}`);
       if (res.ok) {
         const data = await res.json();
         if (!data) setErro(`Cidade '${cidadePesquisa}' não encontrada.`);
